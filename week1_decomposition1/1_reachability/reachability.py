@@ -2,10 +2,45 @@
 
 import sys
 
+visited = list()
+Ccum = list()
+
 
 def reach(adj, x, y):
     # write your code here
-    return 0
+    global visited
+    global Ccum
+    visited = [False] * len(adj)
+    Ccum = [0] * len(adj)
+    cc = 1
+
+    for i, v in enumerate(adj):
+        if len(adj[i]) == 0:
+            continue
+        else:
+            if not visited[i]:
+                explore(i, adj, cc)
+                cc += 1
+        # print(visited)
+    # print('ans', visited[y])
+    # print(Ccum)
+    # print(Ccum[x], Ccum[y])
+    if Ccum[x] == Ccum[y]:
+        return 1
+    else:
+        return 0
+
+
+def explore(v, adj, cc):
+    global visited
+    global Ccum
+    if visited[v]:
+        return
+    visited[v] = True
+    Ccum[v] = cc
+    for nb in adj[v]:
+        if not visited[nb]:
+            explore(nb, adj, cc)
 
 
 if __name__ == '__main__':
