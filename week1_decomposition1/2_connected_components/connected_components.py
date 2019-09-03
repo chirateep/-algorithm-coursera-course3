@@ -2,11 +2,53 @@
 
 import sys
 
+visited = list()
+Ccum = list()
+
 
 def number_of_components(adj):
-    result = 0
     # write your code here
+    global visited
+    global Ccum
+
+    visited = [False] * len(adj)
+    Ccum = [0] * len(adj)
+    cc = 1
+
+    for i, v in enumerate(adj):
+        if len(adj[i]) == 0:
+            continue
+        else:
+            if not visited[i]:
+                explore(i, adj, cc)
+                cc += 1
+
+    result = 0
+    components = dict()
+    for i in Ccum:
+        if i == 0:
+            result += 1
+            continue
+
+        find_comp = components.get(i, -1)
+        if find_comp == -1:
+            components[i] = 0
+            result += 1
+        else:
+            components[i] += 1
     return result
+
+
+def explore(v, adj, cc):
+    global visited
+    global Ccum
+    if visited[v]:
+        return
+    visited[v] = True
+    Ccum[v] = cc
+    for nb in adj[v]:
+        if not visited[nb]:
+            explore(nb, adj, cc)
 
 
 if __name__ == '__main__':
