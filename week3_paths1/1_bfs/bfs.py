@@ -1,11 +1,35 @@
-#Uses python3
+# Uses python3
 
 import sys
-import queue
+from collections import deque
+
 
 def distance(adj, s, t):
-    #write your code here
-    return -1
+    # write your code here
+
+    # init value
+    queue = deque()
+    dist = dict()
+    for i, v in enumerate(adj):
+        dist[i] = float('inf')
+    dist[s] = 0
+
+    # print(adj)
+    queue.append(s)
+    while len(queue) > 0:
+        u = queue.popleft()
+
+        for e in adj[u]:
+            # print(u, e)
+            if dist[e] == float('inf'):
+                queue.append(e)
+                dist[e] = dist[u] + 1
+
+    if dist[t] == float('inf'):
+        return -1
+
+    return dist[t]
+
 
 if __name__ == '__main__':
     input = sys.stdin.read()
