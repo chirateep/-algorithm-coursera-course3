@@ -1,11 +1,46 @@
-#Uses python3
+# Uses python3
 
 import sys
-import queue
+from collections import deque
+
+visited = list()
+
 
 def bipartite(adj):
-    #write your code here
-    return -1
+    # write your code here
+    # init value
+    global visited
+    visited = [False] * len(adj)
+    queue = deque()
+    dist = dict()
+    for i, v in enumerate(adj):
+        dist[i] = float('inf')
+
+    # print(adj)
+    for i, v in enumerate(adj):
+        if len(adj[i]) == 0:
+            continue
+        else:
+            if not visited[i]:
+                dist[i] = 0
+                queue.append(i)
+                while len(queue) > 0:
+                    u = queue.popleft()
+                    visited[u] = True
+                    for e in adj[u]:
+                        # print(u, e)
+                        if dist[e] == float('inf'):
+                            queue.append(e)
+                            dist[e] = dist[u] + 1
+
+    for i, edges in enumerate(adj):
+        for e in edges:
+            distance = dist[i]
+            if distance == dist[e]:
+                return 0
+
+    return 1
+
 
 if __name__ == '__main__':
     input = sys.stdin.read()
