@@ -1,12 +1,47 @@
-#Uses python3
+# Uses python3
 
 import sys
-import queue
+import heapq
+
+visited = list()
 
 
-def distance(adj, cost, s, t):
-    #write your code here
-    return -1
+def distance(adj, costs, s, t):
+    # write your code here
+    global visited
+    visited = [False] * len(adj)
+    dist = dict()
+    prev = dict()
+    for i, v in enumerate(adj):
+        dist[i] = float('inf')
+        prev[i] = None
+
+    dist[s] = 0
+    heap = make_heap(dist)
+    while len(heap) > 0:
+        u = heapq.heappop(heap)
+        node_index = u[1]
+        for edge, cost in zip(adj[node_index], costs[node_index]):
+            if dist[edge] > dist[node_index] + cost:
+                heap_index = heap.index((dist[edge], edge))
+                # print(heap_index, heap)
+                dist[edge] = dist[node_index] + cost
+                prev[edge] = node_index
+                heap[heap_index] = (dist[edge], edge)
+                heapq.heapify(heap)
+
+    if dist[t] == float('inf'):
+        return -1
+    else:
+        return dist[t]
+
+
+def make_heap(dist):
+    heap = list()
+    for k, v in dist.items():
+        heap_key = (v, k)
+        heapq.heappush(heap, heap_key)
+    return heap
 
 
 if __name__ == '__main__':
