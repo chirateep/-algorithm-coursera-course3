@@ -1,10 +1,39 @@
-#Uses python3
+# Uses python3
 
 import sys
 
 
-def negative_cycle(adj, cost):
-    #write your code here
+def negative_cycle(adj, costs):
+    # write your code here
+    dist = dict()
+    prev = dict()
+    visited = [False] * len(adj)
+
+    for i, node in enumerate(adj):
+        dist[i] = float('inf')
+        prev[i] = None
+
+    for x in range(len(adj)):
+        if not visited[x]:
+            dist[x] = 0
+            for _ in range(len(adj)):
+                for i, node in enumerate(adj):
+                    for edge, cost in zip(node, costs[i]):
+                        if dist[edge] > dist[i] + cost:
+                            dist[edge] = dist[i] + cost
+                            prev[edge] = i
+
+            print(dist)
+
+            for i, node in enumerate(adj):
+                for edge, cost in zip(node, costs[i]):
+                    if dist[edge] > dist[i] + cost:
+                        return 1
+
+            for i in range(len(adj)):
+                if dist[i] != float('inf'):
+                    visited[i] = True
+
     return 0
 
 
